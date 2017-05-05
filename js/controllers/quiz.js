@@ -7,7 +7,10 @@ function quizController(quizService){
    vd.activeQuestion = 0;
    vd.quizLength = vd.data.length-1;
    vd.numQuestionAnswered = 0;
-   
+   vd.quizOver = false;
+   vd.score = 0;
+
+   vd.correctAnswer = [0,1,2,3,2,1,0,1,2,3];
 
    vd.selectQuestion = function(index){
 
@@ -30,25 +33,43 @@ function quizController(quizService){
 
    }
 
+
+//bug here...
    vd.selectAnswer = function(index){
-       vd.data[vd.activeQuestion].selected = index;
+       
+       if(!vd.quizOver){
+           vd.data[vd.activeQuestion].selected = index;
+        }
    }
 
    vd.questionAnswered = function(){
 
     if(vd.data[vd.activeQuestion].selected !== null){
         vd.numQuestionAnswered++;
-        if(vd.numQuestionAnswered >= vd.quizLength){
-            vd.endQuiz();
-        }
     }
     vd.setActiveQuestion();
 
    }
 
 
+   vd.checkAnswers = function(){
+    var x =0;
+    while(x < vd.quizLength){
+        if(vd.data[x].selected == vd.correctAnswer[x]){
+           vd.score++;
+            vd.data[x].correct = true;
+        }
+        x++;
+    }
+   }
+
+
    vd.endQuiz = function(){
-        //
+        vd.quizOver = true;
+        vd.numQuestionAnswered = 0;
+        vd.activeQuestion = 0;
+       vd.checkAnswers(); 
+
    }
 
 
